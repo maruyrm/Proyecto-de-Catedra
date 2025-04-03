@@ -1,0 +1,306 @@
+using System;
+using System.IO;
+
+struct Destino
+{
+    public string Pais;
+    public string CiudadFinal;
+    public string Escalas;
+    public int IdVuelo;
+}
+
+struct Vuelo
+{
+    public int IdVuelo;
+    public string Horario;
+    public string TipoAvion;
+    public int Pasajeros;
+    public string TipoClase;
+}
+
+struct Cliente
+{
+    public int IdCliente;
+    public string Nombre;
+    public string Apellido;
+    public string FechaDeNacimiento;
+    public string Email;
+    public int Telefono;
+    public int Dui;
+    public string Direccion;
+}
+
+class Program
+{
+    static Destino[] destinos = new Destino[10];
+    static Vuelo[] vuelos = new Vuelo[10];
+    static Cliente[] clientes = new Cliente[10];
+    static int destinoCount = 0;
+    static int vueloCount = 0;
+    static int clienteCount = 0;
+
+    static void Main()
+    {
+        InicializarDestinos();
+
+        Console.WindowHeight = 35;  // alto de la ventana           
+        Console.WindowWidth = 70; //ancho de la ventana
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.BackgroundColor = ConsoleColor.Black;
+        Console.Clear();
+        Console.Title = "Agencia de Vuelos";
+        Console.Write("\n");
+
+        ConsoleKeyInfo op;
+        bool continuar = true;
+
+        do
+        {
+            Console.Clear();
+            Console.Write("\n");
+            Console.Write("\n");
+            Console.Write("\n");
+            Console.WriteLine("\t===================================================");
+            Console.WriteLine("\t=                                                 =");
+            Console.WriteLine("\t=  Bienvenido al Sistema de reserva de vuelos     =");
+            Console.WriteLine("\t=                                                 =");
+            Console.WriteLine("\t=  Elija la opcion que desee colocando una letra: =");
+            Console.WriteLine("\t=                                                 =");
+            Console.WriteLine("\t=               1) Registrar Cliente              =");
+            Console.WriteLine("\t=               2) Agregar un vuelo               =");
+            Console.WriteLine("\t=               3) Ver destinos                   =");
+            Console.WriteLine("\t=               4) Salir del programa             =");
+            Console.WriteLine("\t=                                                 =");
+            Console.WriteLine("\t=                                                 =");
+            Console.WriteLine("\t=  Hecho por Mario Flores  FG250276               =");
+            Console.WriteLine("\t===================================================");
+
+            Console.Write("\tPresione la tecla de su opción : ");
+            op = Console.ReadKey(true);
+
+            switch (op.Key)
+            {
+                case ConsoleKey.D1:
+                    RegistrarCliente();
+                    break;
+
+                case ConsoleKey.D2:
+                    AgregarVuelo();
+                    break;
+
+                case ConsoleKey.D3:
+                    VerDestinos();
+                    break;
+
+                case ConsoleKey.D4:
+                    continuar = false;
+                    break;
+
+                default:
+                    Console.WriteLine("\n\tOpción no válida. Presione cualquier tecla para continuar...");
+                    Console.ReadKey(true);
+                    break;
+            }
+
+        } while (continuar);
+
+        Console.Clear();
+        Console.WriteLine("\n\n\t--> Fin del Programa");
+        Console.ReadKey(true);
+    }
+
+    static void InicializarDestinos()
+    {
+        destinos[0] = new Destino { Pais = "Costa Rica", CiudadFinal = "San José", Escalas = "No", IdVuelo = 1 };
+        destinos[1] = new Destino { Pais = "Panamá", CiudadFinal = "Panamá City", Escalas = "No", IdVuelo = 2 };
+        destinos[2] = new Destino { Pais = "México", CiudadFinal = "Ciudad de México", Escalas = "No", IdVuelo = 3 };
+        destinos[3] = new Destino { Pais = "Estados Unidos", CiudadFinal = "Nueva York", Escalas = "No", IdVuelo = 4 };
+        destinos[4] = new Destino { Pais = "España", CiudadFinal = "Madrid", Escalas = "Sí", IdVuelo = 5 };
+        destinos[5] = new Destino { Pais = "Francia", CiudadFinal = "París", Escalas = "Sí", IdVuelo = 6 };
+        destinos[6] = new Destino { Pais = "Italia", CiudadFinal = "Roma", Escalas = "Sí", IdVuelo = 7 };
+        destinos[7] = new Destino { Pais = "Argentina", CiudadFinal = "Buenos Aires", Escalas = "No", IdVuelo = 8 };
+        destinos[8] = new Destino { Pais = "Chile", CiudadFinal = "Santiago", Escalas = "No", IdVuelo = 9 };
+        destinos[9] = new Destino { Pais = "Brasil", CiudadFinal = "Río de Janeiro", Escalas = "Sí", IdVuelo = 10 };
+        destinoCount = 10;
+    }
+
+    static void RegistrarCliente()
+    {
+        Console.Clear();
+        Cliente cliente = new Cliente();
+
+        Console.Write("\n");
+        Console.Write("\n");
+        Console.Write("\n");
+        Console.Write("\t Escriba el numero de cliente: ");
+        cliente.IdCliente = int.Parse(Console.ReadLine());
+        Console.Write("\t Escriba solo su primer nombre: ");
+        cliente.Nombre = Console.ReadLine();
+        Console.Write("\t Escriba su primer apellido: ");
+        cliente.Apellido = Console.ReadLine();
+        Console.Write("\t Escriba su fecha de nacimiento: ");
+        cliente.FechaDeNacimiento = Console.ReadLine();
+        Console.Write("\t Escriba su email: ");
+        cliente.Email = Console.ReadLine();
+        Console.Write("\t Escriba su numero telefonico: ");
+        cliente.Telefono = int.Parse(Console.ReadLine());
+        Console.Write("\t Escriba su numero de identificacion(dui): ");
+        cliente.Dui = int.Parse(Console.ReadLine());
+        Console.Write("\t Escriba su direccion: ");
+        cliente.Direccion = Console.ReadLine();
+
+        clientes[clienteCount] = cliente;
+        clienteCount++;
+
+        // Guardar en archivo de texto
+        using (StreamWriter sw = new StreamWriter("Clientes.txt", true))
+        {
+            sw.WriteLine($"{cliente.IdCliente},{cliente.Nombre},{cliente.Apellido},{cliente.FechaDeNacimiento},{cliente.Email},{cliente.Telefono},{cliente.Dui},{cliente.Direccion}");
+        }
+
+        Console.Write("\t Cliente registrado correctamente");
+        Console.WriteLine("\n\tPresione cualquier tecla para continuar...");
+        Console.ReadKey(true);
+    }
+
+    static void AgregarVuelo()
+    {
+        Console.Clear();
+
+        Vuelo vuelo = new Vuelo();
+
+        Console.Write("\n");
+        Console.Write("\n");
+        Console.Write("\n");
+        Console.Write("\t Ingrese el ID del vuelo: ");
+        vuelo.IdVuelo = int.Parse(Console.ReadLine());
+        Console.Write("\t Ingrese el horario de vuelo (Mañana/Tarde/Noche): ");
+        vuelo.Horario = Console.ReadLine();
+
+        Console.WriteLine("\t Ingrese el tipo de avión: ");
+        Console.Write("\t Comercial[A] " + "Trabajo[B]");
+        ConsoleKeyInfo tipoAv = Console.ReadKey(true);
+
+        if (tipoAv.Key == ConsoleKey.A)
+        {
+            vuelo.TipoAvion = "Comercial";
+            int pjmaxcom = 100;
+            Console.WriteLine("\t Usted eligió Comercial");
+            Console.Write("\t Digite la cantidad de pasajeros que irán: ");
+            vuelo.Pasajeros = int.Parse(Console.ReadLine());
+
+            if (vuelo.Pasajeros > pjmaxcom)
+            {
+                Console.Clear();
+                Console.Write("\t Digite una cantidad de pasajeros válida");
+                return;
+            }
+        }
+        else if (tipoAv.Key == ConsoleKey.B)
+        {
+            vuelo.TipoAvion = "Trabajo";
+            int passmaxtrabajo = 20;
+
+            Console.WriteLine("\t Usted eligió Trabajo");
+            Console.Write("\t Digite la cantidad de pasajeros que irán: ");
+            vuelo.Pasajeros = int.Parse(Console.ReadLine());
+
+            if (vuelo.Pasajeros > passmaxtrabajo)
+            {
+                Console.Clear();
+                Console.Write("\t Digite una cantidad de pasajeros válida");
+                return;
+            }
+        }
+        else
+        {
+            Console.WriteLine("\t Elija al menos una opción de las que se le da");
+            return;
+        }
+
+        Console.WriteLine("\t Ingrese la clase del vuelo: ");
+        Console.Write("\t Económica[E] " + "Business[B]");
+        ConsoleKeyInfo clase = Console.ReadKey(true);
+
+        if (clase.Key == ConsoleKey.E)
+        {
+            vuelo.TipoClase = "Económica";
+        }
+        else if (clase.Key == ConsoleKey.B)
+        {
+            vuelo.TipoClase = "Business";
+        }
+        else
+        {
+            Console.WriteLine("\t Elija al menos una opción de las que se le da");
+            return;
+        }
+
+        vuelos[vueloCount] = vuelo;
+        vueloCount++;
+
+        // Guardar en archivo de texto
+        using (StreamWriter sw = new StreamWriter("Vuelos.txt", true))
+        {
+            sw.WriteLine($"{vuelo.IdVuelo},{vuelo.Horario},{vuelo.TipoAvion},{vuelo.Pasajeros},{vuelo.TipoClase}");
+        }
+
+        Console.Write("¡Vuelo agregado correctamente!");
+        Console.WriteLine("\n\tPresione cualquier tecla para continuar...");
+        Console.ReadKey(true);
+    }
+
+    static void VerDestinos()
+    {
+        Console.Clear();
+        Console.WriteLine("\n\tDestinos Disponibles:");
+
+        for (int i = 0; i < destinoCount; i++)
+        {
+            Console.WriteLine($"\t{i + 1}. {destinos[i].Pais} - {destinos[i].CiudadFinal} (Escalas: {destinos[i].Escalas})");
+        }
+
+        Console.Write("\n\tSeleccione un destino por número: ");
+        int seleccion = int.Parse(Console.ReadLine()) - 1;
+
+        if (seleccion >= 0 && seleccion < destinoCount)
+        {
+            Console.WriteLine($"\n\tHas seleccionado: {destinos[seleccion].Pais} - {destinos[seleccion].CiudadFinal}");
+            MostrarHorarios();
+        }
+        else
+        {
+            Console.WriteLine("\n\tSelección no válida. Presione cualquier tecla para continuar...");
+            Console.ReadKey(true);
+        }
+    }
+
+    static void MostrarHorarios()
+    {
+        Console.WriteLine("\n\tHorarios Disponibles:");
+        Console.WriteLine("\t1. Mañana");
+        Console.WriteLine("\t2. Tarde");
+        Console.WriteLine("\t3. Noche");
+
+        Console.Write("\n\tSeleccione un horario por número: ");
+        int seleccion = int.Parse(Console.ReadLine());
+
+        switch (seleccion)
+        {
+            case 1:
+                Console.WriteLine("\n\tHas seleccionado el horario de Mañana.");
+                break;
+            case 2:
+                Console.WriteLine("\n\tHas seleccionado el horario de Tarde.");
+                break;
+            case 3:
+                Console.WriteLine("\n\tHas seleccionado el horario de Noche.");
+                break;
+            default:
+                Console.WriteLine("\n\tSelección no válida. Presione cualquier tecla para continuar...");
+                break;
+        }
+        Console.WriteLine("\n\tPresione cualquier tecla para continuar...");
+        Console.ReadKey(true);
+    }
+}
